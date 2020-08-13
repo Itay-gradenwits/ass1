@@ -206,3 +206,16 @@ ErrorCode matrix_multiplyMatrices(PMatrix* result, CPMatrix lhs, CPMatrix rhs) {
          }
      }
 }
+
+ErrorCode matrix_multiplyWithScalar(PMatrix matrix, double scalar) {
+   //if the matrix pointer is null return the matching ERROR.
+    if(matrix == NULL) {
+        return ERROR_NULL_POINTER;
+    }
+    //run all over the matrix boot and multiplie it by the scalar.
+    for (uint32_t rowIdx = 0; rowIdx < matrix->height; rowIdx++) {
+        for(uint32_t colIdx = 0; colIdx < matrix->width; colIdx++) {
+            matrix->data[rowIdx][colIdx] *= scalar;
+        }
+    }
+}
