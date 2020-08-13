@@ -61,6 +61,26 @@ ErrorCode matrix_create(PMatrix* matrix, uint32_t height, uint32_t width) {
      return ERROR_SUCCESS;
 }
 
+ErrorCode matrix_copy(PMatrix* result, CPMatrix source) {
+    //initial the result matrix and save the output error.
+    ErrorCode initialError = matrix_create(result, source->height, source->width);
+    //if the saved error is ERROR_BAD_MATRIX_SIZES return it too.
+    if (initialError == ERROR_BAD_MATRIX_SIZES) {
+        return ERROR_BAD_MATRIX_SIZES;
+    }
+     //if the saved error is ERROR_MEMORY_ELLOCATION_FAIL return it too.
+    if (initialError == ERROR_MEMORY_ELLOCATION_FAIL) {
+        return ERROR_MEMORY_ELLOCATION_FAIL;
+    }
+    //if it is ERROR_SUCCESS copy all the values from the source matrix to the result matrix and return ERROR_SUCCESS.
+    for(uint32_t i =0; i < source->height; i++) {
+        for(uint32_t j =0; j< source->width; j++) {
+            matrix_setValue(result, i, j, source->data[i][j]);
+        }
+    }
+    return ERROR_SUCCESS;
+}
+
 void matrix_destroy(PMatrix matrix) {
     //free all the data collumns of the matrix.
     for (uint32_t i = 0; i< matrix->width; i++) {
