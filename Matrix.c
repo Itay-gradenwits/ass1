@@ -62,6 +62,10 @@ ErrorCode matrix_create(PMatrix* matrix, uint32_t height, uint32_t width) {
 }
 
 ErrorCode matrix_copy(PMatrix* result, CPMatrix source) {
+    //if the source matrix is null we can not copy it.
+    if(source == NULL) {
+        return ERROR_NULL_POINTER;
+    }
     //initial the result matrix and save the output error.
     ErrorCode initialError = matrix_create(result, source->height, source->width);
     //if the saved error is ERROR_BAD_MATRIX_SIZES return it too.
@@ -82,6 +86,10 @@ ErrorCode matrix_copy(PMatrix* result, CPMatrix source) {
 }
 
 void matrix_destroy(PMatrix matrix) {
+    //if the matrix is the null we cant destroy it.
+    if(matrix == NULL) {
+        return;
+    }
     //free all the data collumns of the matrix.
     for (uint32_t i = 0; i< matrix->width; i++) {
         free(matrix->data[i]);
@@ -92,4 +100,13 @@ void matrix_destroy(PMatrix matrix) {
     free(matrix);
 }
 
+ErrorCode matrix_getHeight(CPMatrix matrix, uint32_t* result) {
+    //if the matrix pointer is null return the matching ERROR.
+    if(matrix == NULL) {
+        return ERROR_NULL_POINTER;
+    }
+    //if not, put the height of the matrix at result* and return ERROR_SUCCESS.
+    *result = matrix->height;
+    return ERROR_SUCCESS;
+}
 
