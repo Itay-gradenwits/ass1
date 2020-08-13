@@ -31,6 +31,15 @@ ErrorCode matrix_create(PMatrix* matrix, uint32_t height, uint32_t width) {
     (*matrix)->height = height;
     (*matrix)->width = width;
     
+    //try to allocate the collumns array.
+    (*matrix)->data = malloc(width * sizeof(double*));
+
+    //if it failed free the matrix and return the matching Error.
+    if ((*matrix)->data == NULL) {
+        free(*matrix);
+        return ERROR_MEMORY_ELLOCATION_FAIL;
+    }
+    
     //try the allocate the collumns of the matrix and initial them to 0.
     for(uint32_t i = 0; i < width; i ++) {
         (*matrix)->data[i] = calloc(height, sizeof(double));
