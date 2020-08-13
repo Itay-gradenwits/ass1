@@ -110,3 +110,12 @@ ErrorCode matrix_getHeight(CPMatrix matrix, uint32_t* result) {
     return ERROR_SUCCESS;
 }
 
+ErrorCode matrix_getWidth(CPMatrix matrix, uint32_t* result) {
+    //if the matrix pointer is null return the matching ERROR.
+    if(matrix == NULL) {
+        return ERROR_NULL_POINTER;
+    }
+    //if not, put the width of the matrix at result* and return ERROR_SUCCESS.
+    *result = matrix->width;
+    return ERROR_SUCCESS;;
+}
