@@ -149,3 +149,32 @@ ErrorCode matrix_getValue(CPMatrix matrix, uint32_t rowIndex, uint32_t colIndex,
     *value =  matrix->data[rowIndex][colIndex];
      return ERROR_SUCCESS;     
 }
+
+ErrorCode matrix_add(PMatrix* result, CPMatrix lhs, CPMatrix rhs) {
+    //if the provided matrix pointer is null return the mathcing ERROR.
+    if (lhs == NULL || rhs == NULL) {
+        return ERROR_NULL_POINTER;
+    }
+    //if the 2 matrixs are not at the same sizes.
+    if (lhs->height != rhs->height || lhs->width != rhs->width) {
+        return ERROR_BAD_MATRIX_SIZES;
+    }
+
+    //try to inital a new matrix to result and save the output ERROR.
+    ErrorCode InitialError = matrix_create(result, lhs->height, lhs->width);
+    //if the initial fails because of a bad sizes of the 2 matrix return the matching error.
+    if(InitialError == ERROR_BAD_MATRIX_SIZES) {
+        return ERROR_BAD_MATRIX_SIZES;
+    }
+     //if the initial fails because of a memory ellocation fail return the matching error.
+    if(InitialError == ERROR_MEMORY_ELLOCATION_FAIL) {
+        return ERROR_MEMORY_ELLOCATION_FAIL;
+    }
+    //if the inital succeeded(there cannot be other ERRORS from this function ) build the new matrix in a way that every boot in
+    //the result matrix is a sum of the 2 matching boot int the lhs and rhs matrixs.
+    for(uint32_t colIdx; colIdx < lhs->width; colIdx++) {
+        for(uint32_t rowIdx; rowIdx< lhs->height; rowIdx++) {
+            matrix_setValue(*result, rowIdx, colIdx, lhs->data[rowIdx][colIdx] + rhs->data[rowIdx][colIdx]);
+        }
+    }
+}
