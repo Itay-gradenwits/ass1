@@ -119,3 +119,18 @@ ErrorCode matrix_getWidth(CPMatrix matrix, uint32_t* result) {
     *result = matrix->width;
     return ERROR_SUCCESS;;
 }
+
+ErrorCode matrix_setValue(PMatrix matrix, uint32_t rowIndex, uint32_t colIndex, double value) {
+    //if the provided matrix pointer is null return the mathcing ERROR.
+    if(matrix == NULL) {
+        return ERROR_NULL_POINTER;
+    }
+    //if the provided indexes are not matching to the matrix return the matching ERROR.
+    if (colIndex < 0 || colIndex >= matrix->width  || rowIndex < 0 || rowIndex >= matrix->height ) {
+        return ERORR_BAD_INDEXES;
+    }
+    //if we can change the data(we didnt return any other error) change the boot in the matrix that matches to the indexes, to be value
+    // and return ERROR_SUCCESS. 
+    matrix->data[rowIndex][colIndex] = value;
+    return ERROR_SUCCESS;
+}
