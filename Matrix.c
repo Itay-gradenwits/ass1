@@ -161,13 +161,13 @@ ErrorCode matrix_add(PMatrix* result, CPMatrix lhs, CPMatrix rhs) {
     }
 
     //try to inital a new matrix to result and save the output ERROR.
-    ErrorCode InitialError = matrix_create(result, lhs->height, lhs->width);
+    ErrorCode initialError = matrix_create(result, lhs->height, lhs->width);
     //if the initial fails because of a bad sizes of the 2 matrix return the matching error.
-    if(InitialError == ERROR_BAD_MATRIX_SIZES) {
+    if(initialError == ERROR_BAD_MATRIX_SIZES) {
         return ERROR_BAD_MATRIX_SIZES;
     }
      //if the initial fails because of a memory ellocation fail return the matching error.
-    if(InitialError == ERROR_MEMORY_ELLOCATION_FAIL) {
+    if(initialError == ERROR_MEMORY_ELLOCATION_FAIL) {
         return ERROR_MEMORY_ELLOCATION_FAIL;
     }
     //if the inital succeeded(there cannot be other ERRORS from this function ) build the new matrix in a way that every boot in
@@ -177,4 +177,32 @@ ErrorCode matrix_add(PMatrix* result, CPMatrix lhs, CPMatrix rhs) {
             matrix_setValue(*result, rowIdx, colIdx, lhs->data[rowIdx][colIdx] + rhs->data[rowIdx][colIdx]);
         }
     }
+}
+
+ErrorCode matrix_multiplyMatrices(PMatrix* result, CPMatrix lhs, CPMatrix rhs) {
+    if (lhs == NULL || rhs == NULL) {
+        return ERROR_NULL_POINTER;
+    }
+    //if the 2 matrixs are capable to multiplie because their sizes are not matching.
+    if (lhs->width != rhs->height) {
+        return ERROR_BAD_MATRIX_SIZES;
+    }
+    ErrorCode initialError = matrix_create(result, lhs->height, rhs->width);
+    //if the initial fails because of bad sizes of the 2 matrix return the matching error.
+    if(initialError == ERROR_BAD_MATRIX_SIZES) {
+        return ERROR_BAD_MATRIX_SIZES;
+    }
+     //if the initial fails because of a memory ellocation fail return the matching error.
+    if(initialError == ERROR_MEMORY_ELLOCATION_FAIL) {
+        return ERROR_MEMORY_ELLOCATION_FAIL;
+    }
+     //if the inital succeeded(there cannot be other ERRORS from this function ) build the new matrix by using the formula of
+     // multiplie 2 matrixs.
+     for(uint32_t rowIdx = 0; rowIdx < lhs->height; rowIdx++) {
+         for(uint32_t colIdx = 0; colIdx < rhs->width; colIdx ++) {
+             for(uint32_t k = 0; k < lhs->width; k++) {
+                (*result)->data[rowIdx][colIdx] += (lhs->data[rowIdx][k] * rhs->data[k][colIdx]);
+             }
+         }
+     }
 }
