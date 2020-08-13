@@ -122,7 +122,7 @@ ErrorCode matrix_getWidth(CPMatrix matrix, uint32_t* result) {
 
 ErrorCode matrix_setValue(PMatrix matrix, uint32_t rowIndex, uint32_t colIndex, double value) {
     //if the provided matrix pointer is null return the mathcing ERROR.
-    if(matrix == NULL) {
+    if (matrix == NULL) {
         return ERROR_NULL_POINTER;
     }
     //if the provided indexes are not matching to the matrix return the matching ERROR.
@@ -133,4 +133,19 @@ ErrorCode matrix_setValue(PMatrix matrix, uint32_t rowIndex, uint32_t colIndex, 
     // and return ERROR_SUCCESS. 
     matrix->data[rowIndex][colIndex] = value;
     return ERROR_SUCCESS;
+}
+
+ErrorCode matrix_getValue(CPMatrix matrix, uint32_t rowIndex, uint32_t colIndex, double* value ){
+     //if the provided matrix pointer is null return the mathcing ERROR.
+    if (matrix == NULL || value == NULL) {
+        return ERROR_NULL_POINTER;
+    }
+    //if the provided indexes are not matching to the matrix return the matching ERROR.
+    if (colIndex < 0 || colIndex >= matrix->width  || rowIndex < 0 || rowIndex >= matrix->height ) {
+        return ERORR_BAD_INDEXES;
+    }
+    //if we can get the data(we didnt return any other error) change value to be the boot in the matrix that matches to the indexes,
+    // and return ERROR_SUCCESS. 
+    *value =  matrix->data[rowIndex][colIndex];
+     return ERROR_SUCCESS;     
 }
