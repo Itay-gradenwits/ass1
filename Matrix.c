@@ -79,7 +79,7 @@ ErrorCode matrix_copy(PMatrix* result, CPMatrix source) {
     //if it is ERROR_SUCCESS copy all the values from the source matrix to the result matrix and return ERROR_SUCCESS.
     for(uint32_t i =0; i < source->height; i++) {
         for(uint32_t j =0; j< source->width; j++) {
-            matrix_setValue(result, i, j, source->data[i][j]);
+            matrix_setValue(*result, i, j, source->data[i][j]);
         }
     }
     return ERROR_SUCCESS;
@@ -126,7 +126,7 @@ ErrorCode matrix_setValue(PMatrix matrix, uint32_t rowIndex, uint32_t colIndex, 
         return ERROR_NULL_POINTER;
     }
     //if the provided indexes are not matching to the matrix return the matching ERROR.
-    if (colIndex < 0 || colIndex >= matrix->width  || rowIndex < 0 || rowIndex >= matrix->height ) {
+    if (colIndex >= matrix->width  || rowIndex >= matrix->height ) {
         return ERORR_BAD_INDEXES;
     }
     //if we can change the data(we didnt return any other error) change the boot in the matrix that matches to the indexes, to be value
@@ -141,7 +141,7 @@ ErrorCode matrix_getValue(CPMatrix matrix, uint32_t rowIndex, uint32_t colIndex,
         return ERROR_NULL_POINTER;
     }
     //if the provided indexes are not matching to the matrix return the matching ERROR.
-    if (colIndex < 0 || colIndex >= matrix->width  || rowIndex < 0 || rowIndex >= matrix->height ) {
+    if ( colIndex >= matrix->width || rowIndex >= matrix->height ) {
         return ERORR_BAD_INDEXES;
     }
     //if we can get the data(we didnt return any other error) change value to be the boot in the matrix that matches to the indexes,
@@ -177,6 +177,7 @@ ErrorCode matrix_add(PMatrix* result, CPMatrix lhs, CPMatrix rhs) {
             matrix_setValue(*result, rowIdx, colIdx, lhs->data[rowIdx][colIdx] + rhs->data[rowIdx][colIdx]);
         }
     }
+    return ERROR_SUCCESS;
 }
 
 ErrorCode matrix_multiplyMatrices(PMatrix* result, CPMatrix lhs, CPMatrix rhs) {
@@ -205,6 +206,7 @@ ErrorCode matrix_multiplyMatrices(PMatrix* result, CPMatrix lhs, CPMatrix rhs) {
              }
          }
      }
+     return ERROR_SUCCESS;
 }
 
 ErrorCode matrix_multiplyWithScalar(PMatrix matrix, double scalar) {
@@ -218,4 +220,5 @@ ErrorCode matrix_multiplyWithScalar(PMatrix matrix, double scalar) {
             matrix->data[rowIdx][colIdx] *= scalar;
         }
     }
+    return ERROR_SUCCESS;
 }
