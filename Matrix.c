@@ -13,7 +13,6 @@ typedef struct Matrix {
 }Matrix;
 
 ErrorCode matrix_create(PMatrix* matrix, uint32_t height, uint32_t width) {
-    
     //we cannot create a matrix with less than 1 row or collumn.
     if (height <= 0 || width <= 0) {
         return ERROR_BAD_MATRIX_SIZES;
@@ -32,7 +31,7 @@ ErrorCode matrix_create(PMatrix* matrix, uint32_t height, uint32_t width) {
     (*matrix)->width = width;
     
     //try to allocate the collumns array.
-    (*matrix)->data = malloc(width * sizeof(double*));
+    (*matrix)->data = malloc(height * sizeof(double*));
 
     //if it failed free the matrix and return the matching Error.
     if ((*matrix)->data == NULL) {
@@ -41,13 +40,13 @@ ErrorCode matrix_create(PMatrix* matrix, uint32_t height, uint32_t width) {
     }
     
     //try the allocate the collumns of the matrix and initial them to 0.
-    for(uint32_t i = 0; i < width; i ++) {
-        (*matrix)->data[i] = calloc(height, sizeof(double));
+    for(uint32_t i = 0; i < height; i ++) {
+        (*matrix)->data[(int)i] = calloc(width, sizeof(double));
         //if one of the allocate did not succeeded we need to free all the memory of the matrix we already got.
-        if((*matrix)->data[i] == NULL) {
+        if((*matrix)->data[(int)i] == NULL) {
             //free all the collumns we succeeded to allocate.
             for(uint32_t j = 0; j < i; j++) {
-                free((*matrix)->data[j]);
+                free((*matrix)->data[(int)j]);
             }
             //free the array of the collumns.
             free((*matrix)->data);
@@ -131,7 +130,7 @@ ErrorCode matrix_setValue(PMatrix matrix, uint32_t rowIndex, uint32_t colIndex, 
     }
     //if we can change the data(we didnt return any other error) change the boot in the matrix that matches to the indexes, to be value
     // and return ERROR_SUCCESS. 
-    matrix->data[rowIndex][colIndex] = value;
+    matrix->data[(int)rowIndex][(int)colIndex] = value;
     return ERROR_SUCCESS;
 }
 
