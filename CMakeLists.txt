@@ -14,7 +14,7 @@ include_directories(${CMAKE_SOURCE_DIR}/matrix)
 #   in these directories. We want libmatrix.so which is under 
 #   the matrix directory. Note that a full path is required.
 link_directories(${CMAKE_SOURCE_DIR}/matrix)
-add_executable(Ex1 main.c)
+add_executable(tester main.c)
 # Links out executable with matrix. ld (the linker) will automatically
 #   add the 'lib' prefix and 'so' suffix, which will result in libmatrix.so
 target_link_libraries(tester matrix)
