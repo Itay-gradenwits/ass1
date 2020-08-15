@@ -64,8 +64,7 @@ ErrorCode matrix_getWidth(CPMatrix matrix, uint32_t* result);
  * @param[in] value Value to set.
  * @return ErrorCode
  */
-ErrorCode matrix_setValue(PMatrix matrix, uint32_t rowIndex, uint32_t colIndex,
-                          double value);
+ErrorCode matrix_setValue(PMatrix matrix, uint32_t rowIndex, uint32_t colIndex, double value);
 
 /**
  * @brief Sets a value to the matrix.
@@ -77,8 +76,7 @@ ErrorCode matrix_setValue(PMatrix matrix, uint32_t rowIndex, uint32_t colIndex,
  *  the value from the matrix.
  * @return ErrorCode
  */
-ErrorCode matrix_getValue(CPMatrix matrix, uint32_t rowIndex, uint32_t colIndex,
-                          double* value);
+ErrorCode matrix_getValue(CPMatrix matrix, uint32_t rowIndex, uint32_t colIndex, double* value);
 
 /**
  * @brief Computes the addition of two matrices.
