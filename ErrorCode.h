@@ -27,4 +27,3 @@ bool error_isSuccess(const ErrorCode code);
  * @return const char* the textual representation of the error code.
  */
 const char* error_getErrorMessage(const ErrorCode code);
-
