@@ -23,7 +23,7 @@ ErrorCode matrix_create(PMatrix* matrix, uint32_t height, uint32_t width) {
 
     //if it fails return a matching error.
     if (*matrix == NULL) {
-        return ERROR_MEMORY_ELLOCATION_FAIL;
+        return ERROR_MEMORY_ALLOCATION_FAIL;
     }
 
     //if it succeed initial the fields of the matrix:
@@ -36,24 +36,24 @@ ErrorCode matrix_create(PMatrix* matrix, uint32_t height, uint32_t width) {
     //if it failed free the matrix and return the matching Error.
     if ((*matrix)->data == NULL) {
         free(*matrix);
-        return ERROR_MEMORY_ELLOCATION_FAIL;
+        return ERROR_MEMORY_ALLOCATION_FAIL;
     }
     
     //try the allocate the collumns of the matrix and initial them to 0.
-    for(uint32_t i = 0; i < height; i ++) {
-        (*matrix)->data[(int)i] = calloc(width, sizeof(double));
+    for(uint32_t i = 0; i < height; ++i) {
+        (*matrix)->data[i] = calloc(width, sizeof(double));
         //if one of the allocate did not succeeded we need to free all the memory of the matrix we already got.
-        if((*matrix)->data[(int)i] == NULL) {
+        if((*matrix)->data[i] == NULL) {
             //free all the collumns we succeeded to allocate.
-            for(uint32_t j = 0; j < i; j++) {
-                free((*matrix)->data[(int)j]);
+            for(uint32_t j = 0; j < i; ++j) {
+                free((*matrix)->data[j]);
             }
             //free the array of the collumns.
             free((*matrix)->data);
             //free the matrix
             free(*(matrix));
             //return the matching error.
-            return ERROR_MEMORY_ELLOCATION_FAIL;
+            return ERROR_MEMORY_ALLOCATION_FAIL;
         }
     }
     //if the allocations and initials succeeded.
@@ -72,12 +72,12 @@ ErrorCode matrix_copy(PMatrix* result, CPMatrix source) {
         return ERROR_BAD_MATRIX_SIZES;
     }
      //if the saved error is ERROR_MEMORY_ELLOCATION_FAIL return it too.
-    if (initialError == ERROR_MEMORY_ELLOCATION_FAIL) {
-        return ERROR_MEMORY_ELLOCATION_FAIL;
+    if (initialError == ERROR_MEMORY_ALLOCATION_FAIL) {
+        return ERROR_MEMORY_ALLOCATION_FAIL;
     }
     //if it is ERROR_SUCCESS copy all the values from the source matrix to the result matrix and return ERROR_SUCCESS.
-    for(uint32_t i =0; i < source->height; i++) {
-        for(uint32_t j =0; j< source->width; j++) {
+    for(uint32_t i =0; i < source->height; ++i) {
+        for(uint32_t j =0; j< source->width; ++j) {
             matrix_setValue(*result, i, j, source->data[i][j]);
         }
     }
@@ -90,7 +90,7 @@ void matrix_destroy(PMatrix matrix) {
         return;
     }
     //free all the data collumns of the matrix.
-    for (uint32_t i = 0; i< matrix->width; i++) {
+    for (uint32_t i = 0; i< matrix->width; ++i) {
         free(matrix->data[i]);
     }
     //free the array of collumns.
@@ -166,13 +166,13 @@ ErrorCode matrix_add(PMatrix* result, CPMatrix lhs, CPMatrix rhs) {
         return ERROR_BAD_MATRIX_SIZES;
     }
      //if the initial fails because of a memory ellocation fail return the matching error.
-    if(initialError == ERROR_MEMORY_ELLOCATION_FAIL) {
-        return ERROR_MEMORY_ELLOCATION_FAIL;
+    if(initialError == ERROR_MEMORY_ALLOCATION_FAIL) {
+        return ERROR_MEMORY_ALLOCATION_FAIL;
     }
     //if the inital succeeded(there cannot be other ERRORS from this function ) build the new matrix in a way that every boot in
     //the result matrix is a sum of the 2 matching boot int the lhs and rhs matrixs.
-    for(uint32_t colIdx; colIdx < lhs->width; colIdx++) {
-        for(uint32_t rowIdx; rowIdx< lhs->height; rowIdx++) {
+    for(uint32_t colIdx; colIdx < lhs->width; ++colIdx) {
+        for(uint32_t rowIdx; rowIdx< lhs->height; ++rowIdx) {
             matrix_setValue(*result, rowIdx, colIdx, lhs->data[rowIdx][colIdx] + rhs->data[rowIdx][colIdx]);
         }
     }
@@ -193,14 +193,14 @@ ErrorCode matrix_multiplyMatrices(PMatrix* result, CPMatrix lhs, CPMatrix rhs) {
         return ERROR_BAD_MATRIX_SIZES;
     }
      //if the initial fails because of a memory ellocation fail return the matching error.
-    if(initialError == ERROR_MEMORY_ELLOCATION_FAIL) {
-        return ERROR_MEMORY_ELLOCATION_FAIL;
+    if(initialError == ERROR_MEMORY_ALLOCATION_FAIL) {
+        return ERROR_MEMORY_ALLOCATION_FAIL;
     }
      //if the inital succeeded(there cannot be other ERRORS from this function ) build the new matrix by using the formula of
      // multiplie 2 matrixs.
-     for(uint32_t rowIdx = 0; rowIdx < lhs->height; rowIdx++) {
-         for(uint32_t colIdx = 0; colIdx < rhs->width; colIdx ++) {
-             for(uint32_t k = 0; k < lhs->width; k++) {
+     for(uint32_t rowIdx = 0; rowIdx < lhs->height; ++rowIdx) {
+         for(uint32_t colIdx = 0; colIdx < rhs->width; ++colIdx) {
+             for(uint32_t k = 0; k < lhs->width; ++k) {
                 (*result)->data[rowIdx][colIdx] += (lhs->data[rowIdx][k] * rhs->data[k][colIdx]);
              }
          }
@@ -214,8 +214,8 @@ ErrorCode matrix_multiplyWithScalar(PMatrix matrix, double scalar) {
         return ERROR_NULL_POINTER;
     }
     //run all over the matrix boot and multiplie it by the scalar.
-    for (uint32_t rowIdx = 0; rowIdx < matrix->height; rowIdx++) {
-        for(uint32_t colIdx = 0; colIdx < matrix->width; colIdx++) {
+    for (uint32_t rowIdx = 0; rowIdx < matrix->height; ++rowIdx) {
+        for(uint32_t colIdx = 0; colIdx < matrix->width; ++colIdx) {
             matrix->data[rowIdx][colIdx] *= scalar;
         }
     }

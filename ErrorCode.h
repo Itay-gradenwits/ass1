@@ -6,7 +6,7 @@
 typedef enum {
     // DON'T CHANGE THIS VALUE!
     ERROR_SUCCESS = 0,
-    ERROR_MEMORY_ELLOCATION_FAIL,
+    ERROR_MEMORY_ALLOCATION_FAIL,
     ERROR_BAD_MATRIX_SIZES,
     ERROR_NULL_POINTER,
     ERORR_BAD_INDEXES
@@ -18,7 +18,7 @@ typedef enum {
  * @param[in] code the error code.
  * @return whether the error code indicates a success or not.
  */
-bool error_isSuccess(ErrorCode code);
+bool error_isSuccess(const ErrorCode code);
 
 /**
  * @brief gets a textual error message for a given error code.
@@ -26,4 +26,4 @@ bool error_isSuccess(ErrorCode code);
  * @param[in] code the error code.
  * @return const char* the textual representation of the error code.
  */
-const char* error_getErrorMessage(ErrorCode code);
+const char* error_getErrorMessage(const ErrorCode code);
